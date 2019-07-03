@@ -92,7 +92,7 @@ sha = ''
 def load():
 	global data
 	global sha
-	from_github = requests.get(url + '?ref=master', headers = {"Authorization": "token " + token}).json()
+	from_github = requests.get(url + '?ref=master', headers = {"Authorization": "token " + git_token}).json()
 	sha = from_github['sha']
 	s = base64.b64decode(from_github['content'])
 	data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
@@ -105,7 +105,7 @@ def write():
 	"content" : base64.b64encode(s.encode()).decode("utf-8"), #okay that's some messed up shit
 	"sha" : sha 
 	}
-	requests.put(url, json = message, headers = {"Content-Type": "application/json", "Authorization": "token " + token})
+	requests.put(url, json = message, headers = {"Content-Type": "application/json", "Authorization": "token " + git_token})
 
 
 #constants
