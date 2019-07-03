@@ -94,7 +94,7 @@ def load():
 	global sha
 	from_github = requests.get(url + '?ref=master', headers = {"Authorization": "token " + git_token}).json()
 	sha = from_github['sha']
-	s = base64.b64decode(from_github['content'])
+	s = base64.b64decode(from_github['content']).decode('utf-8')
 	data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
 
 def write():
