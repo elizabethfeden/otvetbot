@@ -95,8 +95,9 @@ def write():
 
 
 #constants
-TOKEN = ''
-OWNER_ID = ''
+import os
+TOKEN = os.getenv("TOKEN")
+OWNER_ID = os.getenv("OWNER_ID")
 CHANNEL_ID = '@faktikiandchgk'
 
 
@@ -509,9 +510,6 @@ def mb(update, context):
 #MAIN
 def main():
 	load()
-	
-	import os
-	TOKEN = os.getenv("TOKEN")
 
 	pp = PicklePersistence(filename='conversationbot')
 	updater = Updater(token=TOKEN, persistence=pp, use_context=True)
@@ -595,7 +593,6 @@ def main():
 
 	#updater.start_polling()
 	
-	OWNER_ID = os.getenv("OWNER_ID")
 	PORT = int(os.environ.get("PORT", "8443"))
 	HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
 	updater.start_webhook(listen="0.0.0.0",
