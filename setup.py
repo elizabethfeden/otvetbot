@@ -97,7 +97,7 @@ def write():
 #constants
 import os
 TOKEN = os.getenv("TOKEN")
-OWNER_ID = os.getenv("OWNER_ID")
+OWNER_ID = int(os.getenv("OWNER_ID"))
 CHANNEL_ID = '@faktikiandchgk'
 
 
@@ -496,6 +496,8 @@ def mesback(update, context):
 		context.user_data['sendid'] = update.message.reply_to_message.forward_from.id
 		update.message.reply_text("Ну-ка.")
 		return MB_TYPING
+	else:
+		return ConversationHandler.END
 		
 
 def mb(update, context):
