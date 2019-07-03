@@ -45,7 +45,10 @@ class Svoyak(Question):
 
 
 #json serialization
+import requests
+import base64
 import json
+import os
 
 data = {
 	'fact_id': 0,
@@ -82,20 +85,30 @@ class QuestionDecoder:
 		else: 
 			return json_object
 
+url = "https://api.github.com/repos/elizabethfeden/otvetbot/contents/data.json"
+git_token = os.getenv("GIT_TOKEN")
+sha = ''
+
 def load():
-	with open('data.json', 'r') as readfile:
-		global data
-		s = readfile.read()
-		data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
+	global data
+	global sha
+	from_github = requests.get(url + '?ref=master', headers = {"Authorization": "token " + token}).json()
+	sha = from_github['sha']
+	s = base64.b64decode(from_github['content'])
+	data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
 
 def write():
-	with open('data.json', 'w') as writefile:
-		s = json.dumps(data, cls=QuestionEncoder, indent=4)
-		writefile.write(s)
+	s = json.dumps(data, cls=QuestionEncoder, indent=4)
+	message = {
+	"message" : "data updated",
+	"branch" : "master",
+	"content" : base64.b64encode(s.encode()).decode("utf-8"), #okay that's some messed up shit
+	"sha" : sha 
+	}
+	requests.put(url, json = message, headers = {"Content-Type": "application/json", "Authorization": "token " + token})
 
 
 #constants
-import os
 TOKEN = os.getenv("TOKEN")
 OWNER_ID = int(os.getenv("OWNER_ID"))
 CHANNEL_ID = '@faktikiandchgk'
