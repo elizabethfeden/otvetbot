@@ -2,7 +2,7 @@
     "fact_id": 3,
     "chgk_id": 2,
     "chgk_publ_id": 2,
-    "svoyak_id": 1,
+    "svoyak_id": 0,
     "svoyak_publ_id": 0,
     "fact_titles": [
         "\u0440\u0430\u0437",
@@ -30,22 +30,5 @@
             "type_question": true
         }
     ],
-    "svoyaks": [
-        {
-            "keys": [
-                2,
-                3,
-                3,
-                1,
-                1
-            ],
-            "title": "\u0440\u0430\u0437",
-            "text": "\u0440\u0430\u0437\u0440\u0430\u0437",
-            "answer": "\u043e\u0442\u0432\u0435\u0442: \u0440\u0430\u0437",
-            "author": 358160357,
-            "getstat": false,
-            "tried": 5,
-            "type_question": false
-        }
-    ]
+    "svoyaks": []
 }
