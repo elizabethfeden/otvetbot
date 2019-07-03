@@ -260,7 +260,7 @@ def myfact_end(update, context):
 	content = "#фактик " + str(data['fact_id']) + "\n" + content
 	context.bot.send_message(chat_id=OWNER_ID, parse_mode="Markdown", 
 		text="Новый факт от [user](tg://user?id=" + str(update.message.chat_id) +")")
-	context.bot.send_message(chat_id=OWNER_ID, parse_mode="Markdown", text=content)
+	context.bot.send_message(chat_id=OWNER_ID, text=content)
 
 	write()
 
@@ -370,8 +370,8 @@ def mq_end(update, context):
 	
 	context.bot.send_message(chat_id=OWNER_ID, parse_mode="Markdown", 
 		text="Новый вопрос от [user](tg://user?id=" + str(update.message.chat_id) +")")
-	context.bot.send_message(chat_id=OWNER_ID, parse_mode="Markdown", text=full)
-	context.bot.send_message(chat_id=OWNER_ID, parse_mode="Markdown", text=answer)
+	context.bot.send_message(chat_id=OWNER_ID, text=full)
+	context.bot.send_message(chat_id=OWNER_ID, text=answer)
 
 	write()
 	return ConversationHandler.END
