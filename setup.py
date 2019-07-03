@@ -509,6 +509,9 @@ def mb(update, context):
 #MAIN
 def main():
 	load()
+	
+	import os
+	TOKEN = os.getenv("TOKEN")
 
 	pp = PicklePersistence(filename='conversationbot')
 	updater = Updater(token=TOKEN, persistence=pp, use_context=True)
@@ -592,8 +595,6 @@ def main():
 
 	#updater.start_polling()
 	
-	import os
-	TOKEN = os.getenv("TOKEN")
 	OWNER_ID = os.getenv("OWNER_ID")
 	PORT = int(os.environ.get("PORT", "8443"))
 	HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
