@@ -98,7 +98,7 @@ def req_get():
 def load():
 	global data
 	from_github = req_get()
-	s = base64.b64decode(from_github['content'])
+	s = base64.b64decode(from_github['content']).decode('utf-8')
 	data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
 
 def write():
