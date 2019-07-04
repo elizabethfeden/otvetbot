@@ -89,16 +89,21 @@ url = "https://api.github.com/repos/elizabethfeden/otvetbot/contents/data.json"
 git_token = os.getenv("GIT_TOKEN")
 sha = ''
 
-def load():
-	global data
+def req_get():
 	global sha
 	from_github = requests.get(url + '?ref=master', headers = {"Authorization": "token " + git_token}).json()
 	sha = from_github['sha']
-	s = base64.b64decode(from_github['content']).decode('utf-8')
+	return from_github
+
+def load():
+	global data
+	from_github = req_get()
+	s = base64.b64decode(from_github['content'])
 	data = json.JSONDecoder(object_hook = QuestionDecoder.from_json).decode(s)
 
 def write():
 	s = json.dumps(data, cls=QuestionEncoder, indent=4)
+	req_get()
 	message = {
 	"message" : "data updated",
 	"branch" : "master",
