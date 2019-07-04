@@ -1,12 +1,10 @@
 {
-    "fact_id": 1,
+    "fact_id": 0,
     "chgk_id": 0,
     "chgk_publ_id": 2,
     "svoyak_id": 0,
     "svoyak_publ_id": 0,
-    "fact_titles": [
-        "\u0434\u0432\u0430"
-    ],
+    "fact_titles": [],
     "chgks": [],
     "svoyaks": []
 }
