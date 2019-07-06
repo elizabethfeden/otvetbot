@@ -525,9 +525,11 @@ def mb(update, context):
 
 def mesto(update, context):
 	if update.message.chat_id == OWNER_ID:
-		context.user_data['sendid'] = context.args
+		context.user_data['sendid'] = context.args[0]
 		update.message.reply_text("Ну-ка.")
 		return MB_TYPING
+	else:
+		return ConversationHandler.END
 
 
 
