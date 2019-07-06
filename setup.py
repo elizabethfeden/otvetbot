@@ -517,13 +517,17 @@ def mesback(update, context):
 	else:
 		return ConversationHandler.END
 		
-
 def mb(update, context):
 	text = "Ответ на твое сообщение в /messageme:\n\n" + update.message.text
 	sendto(context.bot, context.user_data['sendid'], text)
 	update.message.reply_text("Отправлено.")
 	return ConversationHandler.END
 
+def mesto(update, context):
+	if update.message.chat_id == OWNER_ID:
+		context.user_data['sendid'] = context.args
+		update.message.reply_text("Ну-ка.")
+		return MB_TYPING
 
 
 
@@ -591,6 +595,7 @@ def main():
 		entry_points=[
 			CommandHandler('messageme', messageme),
 			CommandHandler('mesback', mesback),
+			CommandHandler('mesto', mesto),
 		],
 
 		states={
