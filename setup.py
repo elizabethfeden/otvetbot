@@ -179,11 +179,11 @@ def getq(update, context):
 			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
 				id = int(context.args[1])
 				q = data['chgks'][id-1]
-				update.reply_text("#чгк {}\n{}\n\n{}".format(data['chgk_publ_id']+1, q.title, q.text))
+				update.message.reply_text("#чгк {}\n{}\n\n{}".format(data['chgk_publ_id']+1, q.title, q.text))
 			elif context.args[0].lower() == 'svoyak' or context.args[0].lower() == 'svoyak':
 				id = int(context.args[1])
 				q = data['svoyaks'][id-1]
-				update.reply_text("#свояк {}\n{}\n\n{}".format(data['svoyak_publ_id']+1, q.title, q.text))
+				update.message.reply_text("#свояк {}\n{}\n\n{}".format(data['svoyak_publ_id']+1, q.title, q.text))
 			else:
 				raise Exception
 	except Exception as e:
@@ -569,7 +569,7 @@ def settitle(context, args):
 				context.user_data['id'] = id
 			else:
 				raise Exception
-			update.reply_text("Новое название:")
+			update.message.reply_text("Новое название:")
 		else:
 			return ConversationHandler.END
 	except Exception as e:
@@ -580,7 +580,7 @@ def st(update, context):
 	qs = data['chgks'] if context.user_data['type'] else data['svoyaks']
 	q = qs[context.user_data['id']]
 	q.title = update.message.text
-	update.reply_text("Обновлено.")
+	update.message.reply_text("Обновлено.")
 	return ConversationHandler.END
 
 
