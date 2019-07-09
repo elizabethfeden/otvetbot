@@ -558,13 +558,13 @@ def settitle(update, context):
 	try:
 		if update.message.chat_id == OWNER_ID:
 			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
-				id = int(context.args[1])
-				q = data['chgks'][id-1]
+				id = int(context.args[1])-1
+				q = data['chgks'][id]
 				context.user_data['type'] = 1
 				context.user_data['id'] = id
 			elif context.args[0].lower() == 'svoyak' or context.args[0].lower() == 'svoyak':
-				id = int(context.args[1])
-				q = data['svoyaks'][id-1]
+				id = int(context.args[1])-1
+				q = data['svoyaks'][id]
 				context.user_data['type'] = 0
 				context.user_data['id'] = id
 			else:
@@ -578,7 +578,6 @@ def settitle(update, context):
 		return ConversationHandler.END
 
 def st(update, context):
-	global data
 	if context.user_data['type']:
 		data['chgks'][context.user_data['id']].title = update.message.text
 	else:
