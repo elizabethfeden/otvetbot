@@ -554,7 +554,7 @@ def mesto(update, context):
 #SETTITLE
 ST_TITLE = range(1)
 
-def settitle(context, args):
+def settitle(update, context):
 	try:
 		if update.message.chat_id == OWNER_ID:
 			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
