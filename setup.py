@@ -153,6 +153,8 @@ def help(update, context):
 #/publish type id
 #/sendstats type id
 #/get type id
+#/settitle type id
+#/setans type id
 
 def cancel(update, context):
 	update.message.reply_text("Команда отменена.", reply_markup = ReplyKeyboardRemove())
@@ -171,6 +173,23 @@ def sendch(update, context):
 	if update.message.chat_id == OWNER_ID:
 		sendto(context.bot, CHANNEL_ID, " ".join(context.args))
 
+def getq(update, context):
+	try:
+		if update.message.id == OWNER_ID:
+			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
+				id = int(context.args[1])
+				q = data['chgks'][id-1]
+				update.reply_text("#чгк {}\n{}\n\n{}".format(data['chgk_publ_id']+1, q.title, q.text))
+			elif context.args[0].lower() == 'svoyak' or context.args[0].lower() == 'svoyak':
+				id = int(context.args[1])
+				q = data['svoyaks'][id-1]
+				update.reply_text("#свояк {}\n{}\n\n{}".format(data['svoyak_publ_id']+1, q.title, q.text))
+			else:
+				raise Exception
+	except Exception as e:
+		update.message.reply_text("Некорректный ввод" + str(e)) 
+
+
 def sendstats(update, context):
 	try:
 		if update.message.chat_id == OWNER_ID:
@@ -183,7 +202,7 @@ def sendstats(update, context):
 					"Не ответило либо ответило неверно: " + str(q.tried - q.answered) + "\n" \
 					"Процент ответивших: " + str(percentage) + "%"
 				update.message.reply_text(stat)
-				if q.author != OWNER_ID:
+				if q.author != OWNER_ID and q.getstat:
 					sendto(context.bot, q.author, stat)
 			elif context.args[0].lower() == 'svoyak' or context.args[0].lower() == 'свояк':
 				id = int(context.args[1])
@@ -192,7 +211,7 @@ def sendstats(update, context):
 				for i in range(5):
 				 stat += "Процент ответивших за " + str((i+1)*10) + ": " + str(int(q.keys[i] / q.tried * 100)) + "%\n"
 				update.message.reply_text(stat)
-				if q.author != OWNER_ID:
+				if q.author != OWNER_ID and q.getstat:
 					sendto(context.bot, q.author, stat)
 			else: 
 				raise Exception
@@ -259,7 +278,7 @@ def myfact_content(update, context):
 def myfact_end(update, context):
 	content = update.message.text
 	title = context.user_data['title']
-	content = "*" + title + "*\n\n" + content
+	content = "**" + title + "**\n\n" + content
 	data['fact_id'] += 1
 	data['fact_titles'].append(title.lower())
 	content = "#фактик " + str(data['fact_id']) + "\n" + content
@@ -357,7 +376,7 @@ def mq_end(update, context):
 	
 	answer = context.user_data['answer']
 	question = context.user_data['content']
-	full = "*" + context.user_data['title'] + "*\n\n" + question
+	full = "**" + context.user_data['title'] + "**\n\n" + question
 	if context.user_data['type']:
 		dataid = data['chgk_id']
 		q = CHGK(title=context.user_data['title'].lower(), answer=answer, text=question, getstat=feedback, author=update.message.chat_id)
@@ -532,6 +551,38 @@ def mesto(update, context):
 		return ConversationHandler.END
 
 
+#SETTITLE
+ST_TITLE = range(1)
+
+def settitle(context, args):
+	try:
+		if update.message.id == OWNER_ID:
+			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
+				id = int(context.args[1])
+				q = data['chgks'][id-1]
+				context.user_data['type'] = 1
+				context.user_data['id'] = id
+			elif context.args[0].lower() == 'svoyak' or context.args[0].lower() == 'svoyak':
+				id = int(context.args[1])
+				q = data['svoyaks'][id-1]
+				context.user_data['type'] = 0
+				context.user_data['id'] = id
+			else:
+				raise Exception
+			update.reply_text("Новое название:")
+		else:
+			return ConversationHandler.END
+	except Exception as e:
+		update.message.reply_text("Некорректный ввод" + str(e)) 
+		return ConversationHandler.END
+
+def st(update, context):
+	qs = data['chgks'] if context.user_data['type'] else data['svoyaks']
+	q = qs[context.user_data['id']]
+	q.title = update.message.text
+	update.reply_text("Обновлено.")
+	return ConversationHandler.END
+
 
 #MAIN
 def main():
@@ -546,6 +597,7 @@ def main():
 	dp.add_handler(CommandHandler('del', delid))
 	dp.add_handler(CommandHandler('publish', publish))
 	dp.add_handler(CommandHandler('sendstats', sendstats))
+	dp.add_handler(CommandHandler('get', qetq))
 
 	cancelhandler = CommandHandler('cancel', cancel)
 
@@ -607,6 +659,18 @@ def main():
 
 		fallbacks=[cancelhandler],
 		name="mesme",
+		persistent=True
+	)
+
+	settitlehandler = ConversationHandler(
+		entry_points=[CommandHandler('settitle', settitle)],
+
+		states={
+			ST_TITLE: [MessageHandler(Filters.text, st)],
+		},
+
+		fallbacks=[cancelhandler],
+		name="settitle",
 		persistent=True
 	)
 
