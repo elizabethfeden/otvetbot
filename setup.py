@@ -578,12 +578,13 @@ def settitle(update, context):
 		return ConversationHandler.END
 
 def st(update, context):
+	global data
 	if context.user_data['type']:
 		data['chgks'][context.user_data['id']].title = update.message.text
 	else:
 		data['svoyaks'][context.user_data['id']].title = update.message.text
 	write()
-	update.message.reply_text("Обновлено. " + data['chgks'][context.user_data['id']].title)
+	update.message.reply_text("Обновлено.")
 	return ConversationHandler.END
 
 
