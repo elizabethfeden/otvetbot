@@ -175,7 +175,7 @@ def sendch(update, context):
 
 def getq(update, context):
 	try:
-		if update.message.id == OWNER_ID:
+		if update.message.chat_id == OWNER_ID:
 			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
 				id = int(context.args[1])
 				q = data['chgks'][id-1]
@@ -556,7 +556,7 @@ ST_TITLE = range(1)
 
 def settitle(context, args):
 	try:
-		if update.message.id == OWNER_ID:
+		if update.message.chat_id == OWNER_ID:
 			if context.args[0].lower() == 'chgk' or context.args[0].lower() == 'чгк':
 				id = int(context.args[1])
 				q = data['chgks'][id-1]
