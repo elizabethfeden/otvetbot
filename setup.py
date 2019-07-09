@@ -578,7 +578,7 @@ def settitle(update, context):
 		return ConversationHandler.END
 
 def st(update, context):
-	if context.user_data['chgks']:
+	if context.user_data['type']:
 		data['chgks'][context.user_data['id']].title = update.message.text
 	else:
 		data['svoyaks'][context.user_data['id']].title = update.message.text
