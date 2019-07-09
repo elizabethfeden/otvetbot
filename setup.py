@@ -581,6 +581,7 @@ def st(update, context):
 	qs = data['chgks'] if context.user_data['type'] else data['svoyaks']
 	q = qs[context.user_data['id']]
 	q.title = update.message.text
+	qs[context.user_data['id']] = q
 	update.message.reply_text("Обновлено.")
 	return ConversationHandler.END
 
