@@ -570,6 +570,7 @@ def settitle(update, context):
 			else:
 				raise Exception
 			update.message.reply_text("Новое название:")
+			return ST_TITLE
 		else:
 			return ConversationHandler.END
 	except Exception as e:
