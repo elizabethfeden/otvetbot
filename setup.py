@@ -597,7 +597,7 @@ def main():
 	dp.add_handler(CommandHandler('del', delid))
 	dp.add_handler(CommandHandler('publish', publish))
 	dp.add_handler(CommandHandler('sendstats', sendstats))
-	dp.add_handler(CommandHandler('get', qetq))
+	dp.add_handler(CommandHandler('get', getq))
 
 	cancelhandler = CommandHandler('cancel', cancel)
 
