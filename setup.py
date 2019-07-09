@@ -582,7 +582,8 @@ def st(update, context):
 		data['chgks'][context.user_data['id']].title = update.message.text
 	else:
 		data['svoyaks'][context.user_data['id']].title = update.message.text
-	update.message.reply_text("Обновлено.")
+	write()
+	update.message.reply_text("Обновлено. " + data['chgks'][context.user_data['id']].title)
 	return ConversationHandler.END
 
 
