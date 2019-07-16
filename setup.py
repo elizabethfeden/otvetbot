@@ -412,7 +412,6 @@ def vote(update, context, type, id):
 	if name in context.user_data['tries']:
 		return ConversationHandler.END
 	else:
-		context.user_data['tries'].append(name)
 		if type:
 			keyboard = ReplyKeyboardMarkup([['Да', 'Нет']], resize_keyboard = True)
 			update.message.reply_text("Пожалуйста, ответь на анонимный вопрос (во имя статистики!)\n" \
@@ -421,6 +420,7 @@ def vote(update, context, type, id):
 			update.message.reply_text("Пожалуйста, ответь на анонимный вопрос (во имя статистики!)\n" \
 				"Напиши номиналы вопросов, на которые у тебя получилось ответить верно, например:\n" \
 				"10 40 50\n" + "Если у тебя не получилось ответить ни на один вопрос, ответь: 0")
+		context.user_data['tries'].append(name)
 		return CHOOSING_ANS
 
 
