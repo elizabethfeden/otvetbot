@@ -130,10 +130,10 @@
         },
         {
             "keys": [
+                5,
                 4,
                 3,
-                2,
-                4,
+                5,
                 1
             ],
             "title": "\u0441\u0442\u0440\u0430\u043d\u043d\u0430\u044f \u043f\u043b\u0430\u043d\u0435\u0442\u0430",
@@ -141,7 +141,7 @@
             "answer": "\u0437\u0430\u043e\u0434\u043d\u043e \u0438 \u0441\u0430\u043c\u0438 \u043a\u043e\u043c\u0438\u043a\u0441\u044b \u0437\u0434\u0435\u0441\u044c :)\nhttps://telegra.ph/Strannaya-planeta---otvety-08-28",
             "author": 358160357,
             "getstat": true,
-            "tried": 4,
+            "tried": 5,
             "type_question": false
         }
     ]
