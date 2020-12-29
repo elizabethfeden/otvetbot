@@ -4,13 +4,11 @@ from enum import Enum
 """
 	LIST OF ADMIN COMMANDS
 	/sendtochannel message
-	/mesback message {reply to forwarded message}
 	/del type id
 	/publish type id
 	/sendstats type id
 	/get type id
 	/settitle type id
-	/setans type id
 """
 
 Question = Enum('Question', 'FACT CHGK SVOYAK')
@@ -28,7 +26,7 @@ def get_type(t_name):
 
 class AdminCommandsHandler:
 	def __init__(self, admin_id, channel_id, reader):
-		self.admin_id = admin_id
+		self.admin_id = int(admin_id)
 		self.channel_id = channel_id
 		self.reader = reader
 
@@ -84,7 +82,7 @@ class AdminCommandsHandler:
 						'Ожидается первый аргумент "свояк" или "чгк"')
 
 				update.message.reply_text(stat)
-				if question_data[2] != self.admin_id and question_data[7]:
+				if int(question_data[2]) != self.admin_id and question_data[7]:
 					context.bot.send_message(chat_id=question_data[2],
 											 text=stat)
 		except Exception as e:

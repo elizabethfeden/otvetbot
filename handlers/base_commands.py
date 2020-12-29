@@ -3,6 +3,11 @@ from telegram.ext import ConversationHandler
 import logging
 
 
+def default(update, context):
+	update.message.reply_text(
+		'К сожалению, я понимаю только команды отсюда: /help')
+
+
 class BaseCommandsHandler:
 	def __init__(self):
 		self.logger = logging.getLogger(__name__)
@@ -16,7 +21,7 @@ class BaseCommandsHandler:
 	def help(self, update, context):
 		context.bot.send_message(chat_id=update.message.chat_id,
 								 text="""
-Итак, обратная связь.
+Обратная связь:
 /messageme - замечания, предложения, общение
 
 Предложить свое:
@@ -42,7 +47,3 @@ class BaseCommandsHandler:
 	def error(self, update, context):
 		self.logger.warning('Update "%s" caused error "%s"', update,
 							logging.error)
-
-	def default(self, update, context):
-		update.message.reply_text(
-			'К сожалению, я понимаю только команды отсюда: /help')

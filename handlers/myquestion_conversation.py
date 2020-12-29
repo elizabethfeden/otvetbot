@@ -113,7 +113,7 @@ class MyQuestionConversationHandler:
 					update.message.chat_id, content, answer, feedback)
 			full = f'#чгк {q_id}\n{full}'
 		else:
-			q_id = self.reader.add_chgk('svoyaks', title,
+			q_id = self.reader.add_question('svoyaks', title,
 					update.message.chat_id, content, answer, feedback)
 			full = f'#свояк {q_id}\n{full}'
 

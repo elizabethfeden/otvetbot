@@ -1,12 +1,12 @@
 from telegram.ext import ConversationHandler
 from enum import Enum
 
-Typing = Enum('States', 'USER ADMIN')
+Typing = Enum('Typing', 'USER ADMIN')
 
 
 class FeedbackConversationHandler:
 	def __init__(self, admin_id):
-		self.admin_id = admin_id
+		self.admin_id = int(admin_id)
 
 	def message_me_start(self, update, context):
 		update.message.reply_text(

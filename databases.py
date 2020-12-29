@@ -3,7 +3,9 @@ import psycopg2
 
 class DatabaseReader:
     def __init__(self, db_url):
-        self.c = psycopg2.connect(db_url, sslmode="require")
+        # self.c = psycopg2.connect(db_url, sslmode="require")
+        self.c = psycopg2.connect(database="testdb", user="postgres",
+            password="postgres", port=5433)
 
     def __del__(self):
         self.c.close()
@@ -12,7 +14,10 @@ class DatabaseReader:
         cur = self.c.cursor()
         cur.execute(f"SELECT MAX(gapless_id) FROM {table_name} WHERE "
                     "published = TRUE;")
-        return cur.fetchone()[0]
+        p_id = cur.fetchone()[0]
+        if p_id is None:
+            p_id = 0
+        return p_id
 
     def prepare_question_for_publication(self, q_id, table_name):
         publ_id = self.get_last_publ_id(table_name) + 1
@@ -32,6 +37,7 @@ class DatabaseReader:
         cur = self.c.cursor()
         cur.execute(f"UPDATE {table_name} SET published = true WHERE "
                     f"gapless_id = ({new_publ_id});")
+        self.c.commit()
 
     def delete_row(self, row_id, table_name):
         cur = self.c.cursor()
@@ -45,6 +51,7 @@ class DatabaseReader:
         title = cur.fetchone()[0]
         cur.execute(f"UPDATE {table_name} SET gapless_id = gapless_id - 1 "
                     f"WHERE gapless_id > {row_id};")
+        self.c.commit()
         return title
 
     def find_title(self, title, table_name):
@@ -56,16 +63,21 @@ class DatabaseReader:
 
     def set_title(self, q_id, title, table_name):
         cur = self.c.cursor()
-        cur.execute(f"UPDATE {table_name} SET title = {title} "
-                    f"WHERE gapless_id = {q_id}")
+        cur.execute(f"UPDATE {table_name} SET title = %s "
+                    f"WHERE gapless_id = {q_id}", [title])
+        self.c.commit()
 
     def add_fact(self, title):
         cur = self.c.cursor()
         cur.execute("SELECT MAX(gapless_id) FROM facts;")
-        new_id = cur.fetchone()[0] + 1
+        new_id = cur.fetchone()[0]
+        if new_id is None:
+            new_id = 0
+        new_id += 1
         # !! secure from sql injections !!
         cur.execute(f"INSERT INTO facts(gapless_id, title) VALUES('{new_id}', "
                     "%s);", [title])
+        self.c.commit()
         return new_id
 
     def add_question(self, table_name, title, author, content, answer,
@@ -78,11 +90,12 @@ class DatabaseReader:
         new_id += 1
         # !! secure from sql injections !!
         cur.execute(f"INSERT INTO {table_name}(gapless_id, author, title, "
-                    f"text, answer, get_stats) VALUES('{new_id}', '{author}', "
+                    f"text, answer, send_stats) VALUES('{new_id}', '{author}', "
                     f"%s, %s, %s, '{get_stats}');", [title, content, answer])
         if table_name == "svoyaks":
             cur.execute("UPDATE svoyaks SET keys='{0,0,0,0,0}' WHERE "
                         f"gapless_id={new_id};")
+        self.c.commit()
         return new_id
 
     def get_answer_by_id(self, q_id, table_name):
@@ -103,6 +116,7 @@ class DatabaseReader:
         cur.execute(f"UPDATE chgks SET tried = tried + 1,"
                     f"answered = answered + {answered} "
                     f"WHERE gapless_id = {q_id}")
+        self.c.commit()
 
     def update_svoyak_stats(self, q_id, deltas):
         cur = self.c.cursor()
@@ -110,21 +124,6 @@ class DatabaseReader:
                     f"WHERE gapless_id = {q_id}")
         for i, delta in enumerate(deltas):
             if delta != 0:
-                cur.execute(f"UPDATE svoyaks SET keys[{i}] = keys[{i}] + 1 "
+                cur.execute(f"UPDATE svoyaks SET keys[{i+1}] = keys[{i+1}] + 1 "
                             f"WHERE gapless_id={q_id}")
-
-
-
-
-"""
-# con = psycopg2.connect(database="testdb", user="postgres",
-#    password="postgres", port=5433)
-
-with con:
-    cur = con.cursor()
-    # cur.execute("INSERT INTO chgks VALUES(0, 'chgk title 3', 'text', 'answer', '12345', 0, false)")
-    # cur.execute("UPDATE chgks SET tried = tried + 1, answered = answered + 1 WHERE id = (SELECT MAX(id) FROM chgks)")
-    cur.execute("SELECT id, title, answered FROM chgks WHERE id = 1")
-    ans = cur.fetchall()
-    print(ans[0][1])
-"""
+        self.c.commit()

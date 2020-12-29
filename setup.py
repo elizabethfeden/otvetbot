@@ -1,7 +1,6 @@
 import logging
 import os
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, \
 	ConversationHandler
 
@@ -31,7 +30,6 @@ def init_base_commands(dispatcher):
 	bch = base_commands.BaseCommandsHandler()
 	dispatcher.add_handler(CommandHandler('start', bch.start))
 	dispatcher.add_handler(CommandHandler('help', bch.help))
-	dispatcher.add_handler(MessageHandler(Filters.all, bch.default))
 	dispatcher.add_error_handler(bch.error)
 	return CommandHandler('cancel', bch.cancel)
 
@@ -78,7 +76,7 @@ def init_myfact_conversation(dispatcher, cancel_handler):
 
 def init_myquestion_conversation(dispatcher, cancel_handler):
 	mqc = myquestion_conversation.MyQuestionConversationHandler(reader, OWNER_ID)
-	States = myfact_conversation.States
+	States = myquestion_conversation.States
 	dispatcher.add_handler(ConversationHandler(
 		entry_points=[CommandHandler('myquestion', mqc.start)],
 
@@ -148,13 +146,18 @@ def main():
 	init_myquestion_conversation(dispatcher, cancel_handler)
 	init_ansquestion_conversation(dispatcher, cancel_handler)
 	init_feedback_conversations(dispatcher, cancel_handler)
+	# needs to be added the last
+	dispatcher.add_handler(MessageHandler(Filters.all, base_commands.default))
 
+	updater.start_polling()
+
+"""
 	app_name = os.environ.get('HEROKU_APP_NAME')
 	updater.start_webhook(listen='0.0.0.0',
 						  port=int(os.environ.get('PORT', '8443')),
 						  url_path=TOKEN)
 	updater.bot.set_webhook(f'https://{app_name}.herokuapp.com/{TOKEN}')
-	updater.idle()
+	updater.idle()"""
 
 
 if __name__ == '__main__':
