@@ -17,7 +17,7 @@ logging.basicConfig(filename='log.txt', level=logging.DEBUG)
 
 # ======= CONSTANTS AND DATA =======
 
-reader = databases.DatabaseReader(os.getenv("DATABASE_URL"))
+reader = databases.DatabaseReader(os.getenv('DATABASE_URL'))
 
 TOKEN = os.getenv('TOKEN')
 OWNER_ID = os.getenv('OWNER_ID')
@@ -149,15 +149,12 @@ def main():
 	# needs to be added the last
 	dispatcher.add_handler(MessageHandler(Filters.all, base_commands.default))
 
-	updater.start_polling()
-
-"""
 	app_name = os.environ.get('HEROKU_APP_NAME')
 	updater.start_webhook(listen='0.0.0.0',
 						  port=int(os.environ.get('PORT', '8443')),
 						  url_path=TOKEN)
 	updater.bot.set_webhook(f'https://{app_name}.herokuapp.com/{TOKEN}')
-	updater.idle()"""
+	updater.idle()
 
 
 if __name__ == '__main__':

@@ -3,9 +3,7 @@ import psycopg2
 
 class DatabaseReader:
     def __init__(self, db_url):
-        # self.c = psycopg2.connect(db_url, sslmode="require")
-        self.c = psycopg2.connect(database="testdb", user="postgres",
-            password="postgres", port=5433)
+        self.c = psycopg2.connect(db_url, sslmode="require")
 
     def __del__(self):
         self.c.close()
